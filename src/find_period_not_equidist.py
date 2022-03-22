@@ -7,7 +7,6 @@ from plot_funcs import *
 
 
 def find_period_not_equidist(path, 
-reference_time,
 tol_norm_diff=10**(-3), 
 number_steps=1000,
 minimum_number_of_relevant_shifts=2,
@@ -16,14 +15,14 @@ minimum_ratio_of_datapoints_for_shift_autocorrelation=0.3,
 consider_only_significant_correlation=1,
 level_of_significance_for_pearson=0.01,
 output_flag=1,
-plot_tolerances=1):
+plot_tolerances=1,
+reference_time = pd.Timestamp('2017-01-01T12'),):
     '''
     This is the main period detection function. 
     It reads your timeseries from a file given as path and calculates the difference between the original autocorrelation function and several possible shifts in order to find minima which indicate possible periods.
     Then a model is fitted for every suggested period. Afterwards each models performance is evaluated by taking the original time series and subtracting the model. 
     If the model fits the time series well, the leftover should be noise and the autocorrelation function should deteriorate.
     It requires the data path, 
-    a reference time for shift/phase calculation and relevant when fitting the model reference_time,
     the tolerance for the norm difference between the unshifted and shifted autocorrelation function for a shift tol_norm_diff,
     the number of times iteratively we increase the tolerance number_steps,
     the minimum number of shifts required for calculation minimum_number_of_relevant_shifts,
@@ -32,7 +31,8 @@ plot_tolerances=1):
     the flag declaring the usage only of correlations matching our criterion consider_only_significant_correlation,
     the minimum significance level for our correlation criterion level_of_significance_for_pearson,
     the output flag setting plotting to on/off output_flag,
-    the output flag allowing tolerances to be plotted plot_tolerances.
+    the output flag allowing tolerances to be plotted plot_tolerances,
+    a reference time for shift/phase calculation and relevant when fitting the model reference_time.
     The returns are the resulting period res_period, the fitted model res_model if a period was found and a performance criterion res_criteria
 
     :param path: string
