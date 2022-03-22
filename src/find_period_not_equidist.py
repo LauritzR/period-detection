@@ -75,6 +75,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     list_model_data=[]
     list_tolerances=[]
     list_models=[]
+    # stop calculation if no local minima are found (stop_calculation=1)
     if stop_calculation == 0:
         sum_of_shifted_correlation_function = [sum_shifted_function(i, corfunc) for i in list(peaks)]
         df_diffs_lag = pd.DataFrame({'lags': peaks, 'diffs': relevant_diffs, 'sum_of_norms': sum_of_shifted_correlation_function})
