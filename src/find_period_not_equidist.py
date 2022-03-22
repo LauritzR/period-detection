@@ -57,9 +57,9 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     # Test the datapoints for equidistance
     pw_dist = [y-x for x,y in zip(*[iter(df_data_aggregated["date"])]*2)]
     if max(pw_dist) == min(pw_dist):
-        print("Equidistant datapoints.")
+        print("Time-equidistant datapoints.")
     else:
-        print("The datapoints are not equidistant!")
+        print("The datapoints are not time-equidistant!")
     
     # Calculate the difference between the unshifted and shifted autocorrelation function for each shift and determine which ones are relevant based on their local minima (Step 3 & 4 in Algorithm 1 in the paper)
     diffs = [shift_diff(i, corfunc) for i in list(range(0,int(np.array(corfunc).size-np.array(corfunc).size*minimum_ratio_of_datapoints_for_shift_autocorrelation)))]
