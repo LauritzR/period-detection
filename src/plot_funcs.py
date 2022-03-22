@@ -50,8 +50,9 @@ def plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance
 
 
     plt.plot(list(np.array(diffs)))
-    plt.title('Norm of difference between unshited and shifted autocorrelation function')
+    plt.title('Norm of difference between unshifted and shifted autocorrelation function')
     plt.xlabel('Shift in time points')
+    plt.ylabel('Function values of d')
     if plot_tolerances == 1:
         plt.hlines(y=other_tolerances, xmin=0, xmax=len(diffs), colors='green')
         plt.hlines(y=[best_tolerance], xmin=0, xmax=len(diffs), colors='red')
@@ -99,8 +100,8 @@ def plot_without_period(df_data_aggregated, diffs, lag_list, r_list, p_list, cor
     plt.show()
 
     plt.plot(list(np.array(diffs)))
-    plt.title('Norm of difference between unshited and shifted autocorrelation function')
-    plt.xlabel('Shift')
+    plt.title('Norm of difference between unshifted and shifted autocorrelation function')
+    plt.xlabel('Shift in time points')
     plt.show()
 
     plt.plot(lag_list, r_list, label="r")
