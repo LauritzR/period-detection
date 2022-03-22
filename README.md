@@ -10,7 +10,7 @@ find_period_not_equidist(path="time_series_data.csv") # function call
 
 ### Parameters
 - **path (String, required)**: Path to the timeseries data
-- **tol_norm_diff (float, default=0.001)**: The tolerance for the norm difference between the unshifted and shifted autocorrelation function for a shift.
+- **tol_norm_diff (float, default=0.001)**: The tolerance for the norm difference between the the data and the fitted model, see res_criteria = 1.5.
 - **number_steps (int, default=1000)**: Number of steps/The number of times iteratively we increase the tolerance.
 - **minimum_number_of_relevant_shifts (int, default=2)**: The minimum number of shifts required for calculation.
 - **minimum_number_of_datapoints_for_correlation_test (int, default=300)**: The minimum number of datapoints required for calculation.
