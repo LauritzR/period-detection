@@ -128,7 +128,7 @@ plot_tolerances=1):
                     print('Relevant lag in autocorrelation function with non-positive correlation!')
                     break
 
-        #   (Step 6 in Algorithm 1 in the paper)      
+        # Check if there are any suggested periods left if yes... (Step 6 in Algorithm 1 in the paper)      
         if len(list_suggested_periods)>0:
             df_periods_criterion=pd.DataFrame({'periods':list_suggested_periods, 'criterion':list_criterion, 'norm_diff':list_norm_diff_data_model ,'sum_norms':list_norms_data_model, 'model_data':list_model_data, 'models':list_models, 'tolerances':list_tolerances})
             period_very_close_fit=df_periods_criterion['periods'][(df_periods_criterion['norm_diff']<=tol_norm_diff) & (df_periods_criterion['sum_norms']>tol_norm_diff)]
@@ -157,6 +157,7 @@ plot_tolerances=1):
 
             if output_flag==1:
                 plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance, lag_list, r_list, p_list, corfunc, model_data, norm_diff_between_singal_and_model,  plot_tolerances,level_of_significance_for_pearson,consider_only_significant_correlation, minimum_number_of_datapoints_for_correlation_test)
+        # If no, plot without period
         else:
             print('List of suggested periods is empty! Only correlation pattern in autocorrelation function found with at least one lag with zero correlation!')
             res_period = -1
@@ -171,4 +172,5 @@ plot_tolerances=1):
 
             return res_period, res_criteria
     
+    # return the period, the model and the criteria
     return res_period, res_model, res_criteria
