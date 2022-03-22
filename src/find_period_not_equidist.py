@@ -86,10 +86,10 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
             vec_bool=(df_diffs_lag['diffs']<=tol_for_zero) & (df_diffs_lag['sum_of_norms']>tol_for_zero)
             list_relv_pos=(df_diffs_lag['lags'][vec_bool]).to_list()
             
-            # If we have no (further) relevant shifts, we can abort (Step 5 b) in Algorithm 1 in the paper)
             if len(list_relv_pos) >= minimum_number_of_relevant_shifts and len(list_relv_pos)>size_list_relv_pos:
                 size_list_relv_pos = len(list_relv_pos)
                 correlationvalues_at_relevant_peaks = np.array(corfunc)[np.array(list_relv_pos)]
+                # If we have no (further) relevant shifts, we can abort (Step 5 b) in Algorithm 1 in the paper)
                 all_relv_pos_with_positive_correlation = sum((correlationvalues_at_relevant_peaks <= 0).astype(int)) <= 0
                 if all_relv_pos_with_positive_correlation==True:
                     list_tolerances.append(tol_for_zero)
