@@ -75,7 +75,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     list_model_data=[]
     list_tolerances=[]
     list_models=[]
-    # stop calculation if no local minima are found (stop_calculation=1)
+    # stop calculation if no local minima (in addition to at 0) are found (stop_calculation=1)
     if stop_calculation == 0:
         sum_of_shifted_correlation_function = [sum_shifted_function(i, corfunc) for i in list(peaks)]
         df_diffs_lag = pd.DataFrame({'lags': peaks, 'diffs': relevant_diffs, 'sum_of_norms': sum_of_shifted_correlation_function})
@@ -108,6 +108,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                     signal_data=df_data_aggregated["value"].to_numpy().reshape(df_data_aggregated["value"].size, 1)
                     signal_subtracted_model = signal_data - model_data
                     df_data_difference_signal_model = pd.DataFrame(data=signal_subtracted_model, columns=["value"])
+                    # If the output_flag=0 (no graphical output), then calculation time is saved by calculating the autocorrelation function only at the relevant shifts
                     if output_flag==1:
                         r_list_diff, p_list_diff, corfunc_diff, lag_list_diff = autocor(df_data_difference_signal_model["value"], list(range(0,int((df_data_difference_signal_model["value"].size)-minimum_number_of_datapoints_for_correlation_test))),level_of_significance_for_pearson,consider_only_significant_correlation)
                         correlationvalues_signalModel_at_relevant_peaks=np.array(corfunc_diff)[np.array(list_relv_pos)]
@@ -129,10 +130,11 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                     print('Relevant lag in autocorrelation function with non-positive correlation!')
                     break
 
-        # Check if there are any suggested periods left if yes... (Step 6 in Algorithm 1 in the paper)      
+        # Check if there has any periods been suggested if yes...       
         if len(list_suggested_periods)>0:
             df_periods_criterion=pd.DataFrame({'periods':list_suggested_periods, 'criterion':list_criterion, 'norm_diff':list_norm_diff_data_model ,'sum_norms':list_norms_data_model, 'model_data':list_model_data, 'models':list_models, 'tolerances':list_tolerances})
             period_very_close_fit=df_periods_criterion['periods'][(df_periods_criterion['norm_diff']<=tol_norm_diff) & (df_periods_criterion['sum_norms']>tol_norm_diff)]
+            # Test if the fittet model is close to the data (almost perfect fit)
             if period_very_close_fit.size>0:
                 model_very_close_fit = df_periods_criterion['models'][(df_periods_criterion['norm_diff'] <= tol_norm_diff) & (df_periods_criterion['sum_norms'] > tol_norm_diff)]
                 model_data_very_close_fit = df_periods_criterion['model_data'][(df_periods_criterion['norm_diff'] <= tol_norm_diff) & (df_periods_criterion['sum_norms'] > tol_norm_diff)]
@@ -146,6 +148,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 print('Very small difference between data and model, difference smaller than ' + str(tol_norm_diff))
                 print('The suggested period in ' + 'in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
             else:
+                # If the fit is not close but there are suggested periods, then find the period with the best criterion of correlation reduction (Step 6 in Algorithm 1 in the paper)
                 index_min_criterion=df_periods_criterion['criterion'].idxmax()
                 res_period=df_periods_criterion['periods'].iloc[index_min_criterion]
                 res_criteria=df_periods_criterion['criterion'].iloc[index_min_criterion]
@@ -160,7 +163,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance, lag_list, r_list, p_list, corfunc, model_data, norm_diff_between_singal_and_model,  plot_tolerances,level_of_significance_for_pearson,consider_only_significant_correlation, minimum_number_of_datapoints_for_correlation_test)
         # If no, plot without period
         else:
-            print('List of suggested periods is empty! Only correlation pattern in autocorrelation function found with at least one lag with zero correlation!')
+            print('List of suggested periods is empty!')
             res_period = -1
             res_criteria = 0
             if output_flag == 1:
@@ -173,5 +176,5 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
 
             return res_period, res_criteria
     
-    # return the period, the model and the criteria
+    # return the period, the model and the corresponding criterion
     return res_period, res_model, res_criteria
