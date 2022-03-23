@@ -161,7 +161,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 other_tolerances=df_periods_criterion['tolerances'][df_periods_criterion.index != index_min_criterion].to_list()
                 print('Reduction of correlation by model: ' + str(res_criteria) + ' with sigma ' + str(best_tolerance))
                 if max(pw_dist) == min(pw_dist):
-                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + 'and in lags is ' + str(res_period/(max(pw_dist).total_seconds()/60)))
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/(max(pw_dist).total_seconds()/60)))
                 else:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
 
