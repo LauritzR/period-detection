@@ -3,9 +3,9 @@
 ## Usage
 
 ```Python
-from find_period_not_equidist import find_period_not_equidist
+from find_period import find_period
 
-find_period_not_equidist(path="time_series_data.csv") # function call
+find_period(path="time_series_data.csv") # function call
 ```
 
 ### Parameters
