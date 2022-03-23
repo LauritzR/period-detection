@@ -1,12 +1,11 @@
 import pandas as pd
 import numpy as np
-from sklearn.svm import SVR
 from auxiliary_funcs import *
 from plot_funcs import *
 
 
 
-def find_period_not_equidist(path, 
+def find_period(path, 
 tol_norm_diff=10**(-3), 
 number_steps=1000,
 minimum_number_of_relevant_shifts=2,
@@ -49,13 +48,13 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     '''
 
     # Load data
-    df_data_aggregated = pd.read_csv(path, parse_dates=["date"])
+    df_data = pd.read_csv(path, parse_dates=["date"])
     
     # Calculate the autocorrelation function and receive the correlation values r_list, the level of significance list p_list (Step 2 in Algorithm 1 in the paper)
-    r_list, p_list, corfunc, lag_list = autocor(df_data_aggregated["value"], list(range(0,int((df_data_aggregated["value"].size)-minimum_number_of_datapoints_for_correlation_test))), level_of_significance_for_pearson,consider_only_significant_correlation)
+    r_list, p_list, corfunc, lag_list = autocor(df_data["value"], list(range(0,int((df_data["value"].size)-minimum_number_of_datapoints_for_correlation_test))), level_of_significance_for_pearson,consider_only_significant_correlation)
 
     # Test the datapoints for equidistance
-    pw_dist = [y-x for x,y in zip(*[iter(df_data_aggregated["date"])]*2)]
+    pw_dist = [y-x for x,y in zip(*[iter(df_data["date"])]*2)]
     if max(pw_dist) == min(pw_dist):
         print("Time-equidistant datapoints.")
     else:
@@ -94,18 +93,18 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 if all_relv_pos_with_positive_correlation==True:
                     list_tolerances.append(tol_for_zero)
                     # Get the time difference between the shifts (Step 5 c) in Algorithm 1 in the paper)...
-                    relv_time_diff=((df_data_aggregated["date"].iloc[list_relv_pos]-df_data_aggregated["date"].iloc[0]) / pd.Timedelta('1 minutes')).to_list()
+                    relv_time_diff=((df_data["date"].iloc[list_relv_pos]-df_data["date"].iloc[0]) / pd.Timedelta('1 minutes')).to_list()
                     list_of_periods=np.diff(np.array(relv_time_diff))
                     # ...and calculate their median as suggested period (Step 5 d) in Algorithm 1 in the paper)
                     suggested_period = np.median(np.array(list_of_periods)) 
                     suggested_period_in_unit_of_duration_lag=suggested_period 
 
                     # Fit a model based on the data and the phase inside the period, here calculated using modulo (Step 5 e) in Algorithm 1 in the paper)
-                    df_data_aggregated['date_modulo']=(((df_data_aggregated["date"] - reference_time) / pd.Timedelta('1 minutes')) % suggested_period_in_unit_of_duration_lag).copy()
-                    model_data,mlp= fit_model(df_data_aggregated)
+                    df_data['date_modulo']=(((df_data["date"] - reference_time) / pd.Timedelta('1 minutes')) % suggested_period_in_unit_of_duration_lag).copy()
+                    model_data,mlp= fit_model(df_data)
 
                     # Subtract the model data from the original and determine the autocorrelation function as a performance measure (Step 5 f) & g) in Algorithm 1 in the paper)
-                    signal_data=df_data_aggregated["value"].to_numpy().reshape(df_data_aggregated["value"].size, 1)
+                    signal_data=df_data["value"].to_numpy().reshape(df_data["value"].size, 1)
                     signal_subtracted_model = signal_data - model_data
                     df_data_difference_signal_model = pd.DataFrame(data=signal_subtracted_model, columns=["value"])
                     # If the output_flag=0 (no graphical output), then calculation time is saved by calculating the autocorrelation function only at the relevant shifts
@@ -146,7 +145,11 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 best_tolerance = best_tolerances_close_fit[0]
                 other_tolerances = df_periods_criterion['tolerances'][df_periods_criterion['tolerances'] != best_tolerance].to_list()
                 print('Very small difference between data and model, difference smaller than ' + str(tol_norm_diff))
-                print('The suggested period in ' + 'in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
+
+                if max(pw_dist) == min(pw_dist):
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/(max(pw_dist).total_seconds()/60)))
+                else:
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
             else:
                 # If the fit is not close but there are suggested periods, then find the period with the best criterion of correlation reduction (Step 6 in Algorithm 1 in the paper)
                 index_min_criterion=df_periods_criterion['criterion'].idxmax()
@@ -157,22 +160,26 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 best_tolerance=df_periods_criterion['tolerances'][index_min_criterion]
                 other_tolerances=df_periods_criterion['tolerances'][df_periods_criterion.index != index_min_criterion].to_list()
                 print('Reduction of correlation by model: ' + str(res_criteria) + ' with sigma ' + str(best_tolerance))
-                print('The suggested period in ' + 'in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
+                if max(pw_dist) == min(pw_dist):
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + 'and in lags is ' + str(res_period/(max(pw_dist).total_seconds()/60)))
+                else:
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
 
             if output_flag==1:
-                plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance, lag_list, r_list, p_list, corfunc, model_data, norm_diff_between_singal_and_model,  plot_tolerances,level_of_significance_for_pearson,consider_only_significant_correlation, minimum_number_of_datapoints_for_correlation_test)
+                plot_with_period(df_data, diffs, other_tolerances, best_tolerance, lag_list, r_list, p_list, corfunc, model_data, norm_diff_between_singal_and_model,  plot_tolerances,level_of_significance_for_pearson,consider_only_significant_correlation, minimum_number_of_datapoints_for_correlation_test)
         # If no, plot without period
         else:
             print('List of suggested periods is empty!')
             res_period = -1
             res_criteria = 0
             if output_flag == 1:
-                plot_without_period(df_data_aggregated, diffs, lag_list, r_list, p_list, corfunc, plot_tolerances,level_of_significance_for_pearson,consider_only_significant_correlation, minimum_number_of_datapoints_for_correlation_test)
+                plot_without_period(df_data, diffs, lag_list, r_list, p_list, corfunc)
+            return res_period, res_criteria
     else:
         res_period=-1
         res_criteria=0
         if output_flag==1:
-            plot_without_period(df_data_aggregated, diffs, lag_list, r_list, p_list, corfunc)
+            plot_without_period(df_data, diffs, lag_list, r_list, p_list, corfunc)
 
             return res_period, res_criteria
     
