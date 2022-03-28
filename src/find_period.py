@@ -54,10 +54,11 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     r_list, p_list, corfunc, lag_list = autocor(df_data["value"], list(range(0,int((df_data["value"].size)-minimum_number_of_datapoints_for_correlation_test))), level_of_significance_for_pearson,consider_only_significant_correlation)
 
     # Test the datapoints for equidistance
+    lag_len = 0
     pw_dist = [y-x for x,y in zip(*[iter(df_data["date"])]*2)]
     if max(pw_dist) == min(pw_dist):
-        lag_len = max(pw_dist).total_seconds()/60
-        print("Time-equidistant datapoints with a lag size of "+str(max(pw_dist).total_seconds()/60)+" minutes.")
+        lag_len = pw_dist[0].total_seconds()/60
+        print("Time-equidistant datapoints with a lag size of "+str(lag_len)+" minutes.")
     else:
         print("The datapoints are not time-equidistant!")
     
@@ -147,7 +148,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 other_tolerances = df_periods_criterion['tolerances'][df_periods_criterion['tolerances'] != best_tolerance].to_list()
                 print('Very small difference between data and model, difference smaller than ' + str(tol_norm_diff))
 
-                if max(pw_dist) == min(pw_dist):
+                if lag_len:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/lag_len))
                 else:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
@@ -161,7 +162,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 best_tolerance=df_periods_criterion['tolerances'][index_min_criterion]
                 other_tolerances=df_periods_criterion['tolerances'][df_periods_criterion.index != index_min_criterion].to_list()
                 print('Reduction of correlation by model: ' + str(res_criteria) + ' with sigma ' + str(best_tolerance))
-                if max(pw_dist) == min(pw_dist):
+                if lag_len:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/lag_len))
                 else:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
