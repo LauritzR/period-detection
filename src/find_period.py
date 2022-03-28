@@ -61,7 +61,10 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
         print("Time-equidistant datapoints with a lag size of "+str(lag_len)+" minutes.")
     else:
         print("The datapoints are not time-equidistant!")
-    
+        
+    if min_dist.total_seconds() <= 0:
+        print("Warning: At least two records with the same timestamp!")
+        
     # Calculate the difference between the unshifted and shifted autocorrelation function for each shift and determine which ones are relevant based on their local minima (Step 3 & 4 in Algorithm 1 in the paper)
     diffs = [shift_diff(i, corfunc) for i in list(range(0,int(np.array(corfunc).size-np.array(corfunc).size*minimum_ratio_of_datapoints_for_shift_autocorrelation)))]
     relevant_diffs, peaks, stop_calculation = get_relevant_diffs(diffs)
