@@ -48,7 +48,7 @@ These are the possible outputs you get when the output_flag is set during execut
 - **res_criteria (float)**: Set to 0 as there is no model that fits the timeseries.
 
 #### In case of an error
-If an error occurs during execution the error message is printed but further code will still be executed.
+If an error occurs during execution the error message is printed and further code will still be executed.
 - **res_period (float)**: Set to -2 in order to indicate an error.
 - **res_model (RandomForestRegressor object)**: Set to None as no model exists.
 - **res_criteria (float)**: Set to -2 in order to indicate an error.
