@@ -43,5 +43,11 @@ These are the possible outputs you get when the output_flag is set during execut
 - **res_criteria (float)**: A float acting as performance criterium for the model. Between 0 and 1, set to 1.5 in case of a near perfect fit for the model.
 
 #### In case no period is found
-- **res_period (float)**: The period duration itself in minutes, here set to -1 as no period exists.
-- **res_criteria (float)**: A float acting as performance criterium for the model. Here set to 0 as ther is no model that fits the timeseries.
+- **res_period (float)**: Set to -1 as no period exists.
+- **res_model (RandomForestRegressor object)**: Set to None as no model exists.
+- **res_criteria (float)**: Set to 0 as there is no model that fits the timeseries.
+
+#### In case of a error
+- **res_period (float)**: Set to -2 in order to indicate an error.
+- **res_model (RandomForestRegressor object)**: Set to None as no model exists.
+- **res_criteria (float)**: Set to -2 in order to indicate an error.
