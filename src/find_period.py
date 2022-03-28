@@ -56,7 +56,8 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     # Test the datapoints for equidistance
     pw_dist = [y-x for x,y in zip(*[iter(df_data["date"])]*2)]
     if max(pw_dist) == min(pw_dist):
-        print("Time-equidistant datapoints.")
+        lag_len = max(pw_dist).total_seconds()/60
+        print("Time-equidistant datapoints with a lag size of "+str(max(pw_dist).total_seconds()/60)+" minutes.")
     else:
         print("The datapoints are not time-equidistant!")
     
@@ -147,7 +148,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 print('Very small difference between data and model, difference smaller than ' + str(tol_norm_diff))
 
                 if max(pw_dist) == min(pw_dist):
-                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/(max(pw_dist).total_seconds()/60)))
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/lag_len))
                 else:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
             else:
@@ -161,7 +162,7 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 other_tolerances=df_periods_criterion['tolerances'][df_periods_criterion.index != index_min_criterion].to_list()
                 print('Reduction of correlation by model: ' + str(res_criteria) + ' with sigma ' + str(best_tolerance))
                 if max(pw_dist) == min(pw_dist):
-                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/(max(pw_dist).total_seconds()/60)))
+                    print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ', in days is ' + str(res_period / 60 / 24) + ' and in lags is ' + str(res_period/lag_len))
                 else:
                     print('The suggested period in minutes is ' + str(res_period) + ', in hours is ' + str(res_period / 60) + ' and in days is ' + str(res_period / 60 / 24))
 
