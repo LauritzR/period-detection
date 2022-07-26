@@ -144,8 +144,8 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                         print('Relevant lag in autocorrelation function with non-positive correlation!')
                         break
             
-
             
+            Results = namedtuple('Results', 'period model criteria')
 
             # Check if there has any periods been suggested if yes...       
             if len(list_suggested_periods)>0:
@@ -192,19 +192,19 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                 res_criteria = 0
                 if output_flag == 1:
                     plot_without_period(df_data, diffs, lag_list, r_list, p_list, corfunc)
-                return res_period, None, res_criteria
+                return Results(res_period, None, res_criteria)
         else:
             res_period = -1
             res_criteria = 0
             if output_flag==1:
                 plot_without_period(df_data, diffs, lag_list, r_list, p_list, corfunc)
-            return res_period, None, res_criteria
+            return Results(res_period, None, res_criteria)
         
         # return the period, the model and the corresponding criterion
-        return res_period, res_model, res_criteria
+        return Results(res_period, res_model, res_criteria)
 
     except:
         traceback.print_exc()
         res_period = -2
         res_criteria = -2
-        return res_period, None, res_criteria
+        return Results(res_period, None, res_criteria)
