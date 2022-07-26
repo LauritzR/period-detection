@@ -37,6 +37,8 @@ These are the possible outputs you get when the output_flag is set during execut
 3. A plot of the autocorrelation function of the data linking the autocorrelation function to the correlation coefficient r and the significance p.
 
 ### Returns
+The function find_period returns a namedtuple Results(period, model, criteria).
+
 #### In case a period is found
 - **res_period (float)**: The period duration itself in minutes.
 - **res_model (RandomForestRegressor object)**: The best performing model trained to fit the timeseries.
