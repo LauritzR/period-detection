@@ -52,6 +52,8 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
     # Load data
     df_data = pd.read_csv(path, parse_dates=["date"])
     
+    Results = namedtuple('Results', 'period model criteria')
+            
     # Calculate the autocorrelation function and receive the correlation values r_list, the level of significance list p_list (Step 2 in Algorithm 1 in the paper)
     r_list, p_list, corfunc, lag_list = autocor(df_data["value"], list(range(0,int((df_data["value"].size)-minimum_number_of_datapoints_for_correlation_test))), level_of_significance_for_pearson,consider_only_significant_correlation)
 
@@ -145,8 +147,6 @@ reference_time = pd.Timestamp('2017-01-01T12'),):
                         print('Relevant lag in autocorrelation function with non-positive correlation!')
                         break
             
-            
-            Results = namedtuple('Results', 'period model criteria')
 
             # Check if there has any periods been suggested if yes...       
             if len(list_suggested_periods)>0:
