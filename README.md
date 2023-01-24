@@ -3,12 +3,12 @@
 If you use the presented period detection method or the provided Python scripts inspired you for further extensions or variations of this framework, we’ll be happy if you cite our paper “On a method for detecting periods and repeating patterns in time series data with autocorrelation and function approximation” (https://doi.org/10.1016/j.patcog.2023.109355) in course of which the Python implementations of this git repository have been worked out.
 
 ## Installation
-pip install...
+pip install period-detection
 
 ## Usage
 
 ```Python
-from find_period import find_period
+from period_detection find_period
 
 find_period(path="time_series_data.csv") # function call
 ```
