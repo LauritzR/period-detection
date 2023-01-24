@@ -8,7 +8,7 @@ pip install period-detection
 ## Usage
 
 ```Python
-from period_detection find_period
+from period_detection import find_period
 
 find_period(path="time_series_data.csv") # function call
 ```
