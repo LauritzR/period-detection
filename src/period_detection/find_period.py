@@ -1,8 +1,8 @@
 import traceback
 import pandas as pd
 import numpy as np
-from auxiliary_funcs import *
-from plot_funcs import *
+from .auxiliary_funcs import *
+from .plot_funcs import *
 from collections import namedtuple
 
 
