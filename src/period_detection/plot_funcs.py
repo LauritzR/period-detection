@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from auxiliary_funcs import autocor
+from .auxiliary_funcs import autocor
 
 
 def plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance, lag_list, r_list, p_list, corfunc, model_data, norm_diff_between_singal_and_model, plot_tolerances, level_of_significance_for_pearson, consider_only_significant_correlation, minimum_number_of_datapoints_for_correlation_test):
