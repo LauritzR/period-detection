@@ -14,7 +14,7 @@ find_period(path="time_series_data.csv") # function call
 ```
 
 ### Parameters
-- **path (String, required)**: Path to the timeseries data
+- **path (String, required)**: Path to the timeseries data which is a csv-file consisting of a column named “date” with the date of the record as a datetime string (ideally iso8601-formatted) and a column “value” with the value of the record as a numeric format
 - **tol_norm_diff (float, default=0.001)**: The tolerance for the norm difference between the the data and the fitted model, see res_criteria = 1.5.
 - **number_steps (int, default=1000)**: Number of steps by which the range 0 to 1 of the threshold for zero (sigma) is divided.
 - **minimum_number_of_relevant_shifts (int, default=2)**: The minimum number of shifts required for calculation of the period.
