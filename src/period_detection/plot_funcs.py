@@ -44,7 +44,7 @@ def plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance
     plt.legend()
     plt.title("Data and fitted model")
     plt.xlabel('Time in time points')
-    plt.savefig('data_model_trend.png',format='png')
+    plt.savefig('data_model.png',format='png')
     plt.show()
 
 
@@ -56,7 +56,7 @@ def plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance
     if plot_tolerances == 1:
         plt.hlines(y=other_tolerances, xmin=0, xmax=len(diffs), colors='green')
         plt.hlines(y=[best_tolerance], xmin=0, xmax=len(diffs), colors='red')
-    plt.savefig('shift_acf_trend.png',format='png')
+    plt.savefig('shift_acf.png',format='png')
     plt.show()
 
     plt.plot(lag_list, r_list, label="r")
@@ -65,7 +65,7 @@ def plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance
     plt.legend()
     plt.title("Autocorrelation function of data")
     plt.xlabel('Shift of the data in time points')
-    plt.savefig('acf_trend.png',format='png')
+    plt.savefig('acf.png',format='png')
     plt.show()
 
     plt.plot(df_data_difference_signal_model["value"])
@@ -78,7 +78,7 @@ def plot_with_period(df_data_aggregated, diffs, other_tolerances, best_tolerance
     plt.legend()
     plt.title("Autocorrelation function of data minus model")
     plt.xlabel('Shift of the data minus model in time points')
-    plt.savefig('acf_data_model_trend.png',format='png')
+    plt.savefig('acf_data_model.png',format='png')
     plt.show()
 
 def plot_without_period(df_data_aggregated, diffs, lag_list, r_list, p_list, corfunc):
