@@ -47,7 +47,7 @@ The function find_period returns a namedtuple Results(period, model, criteria).
 #### In case a period is found
 - **res_period (float)**: The period duration itself in minutes.
 - **res_model (RandomForestRegressor object)**: The best performing model trained to fit the timeseries.
-- **res_criteria (float)**: A float acting as performance criterium for the model. Between 0 and 1, set to 1.5 in case of a near perfect fit for the model.
+- **res_criteria (float)**: A float acting as performance criterium for the model. Between $-\infty$ and 1, set to 1.5 in case of a near perfect fit for the model.
 
 #### In case no period is found
 - **res_period (float)**: Set to -1 as no period exists.
